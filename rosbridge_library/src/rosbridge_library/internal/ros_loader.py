@@ -34,7 +34,7 @@
 from __future__ import annotations
 import importlib
 from threading import Lock
-from typing import Any
+from typing import Any, Dict, Tuple
 
 """ ros_loader contains methods for dynamically loading ROS message classes at
 runtime.  It's achieved by using roslib to load the manifest files for the
@@ -130,7 +130,7 @@ def get_action_result_instance(typestring: str) -> Any:
 
 
 def _get_interface_class(
-    typestring: str, intf_type: str, loaded_intfs: dict[str, Any], intf_lock: Lock
+    typestring: str, intf_type: str, loaded_intfs: Dict[str, Any], intf_lock: Lock
 ) -> Any:
     """
     If not loaded, loads the specified ROS interface class then returns an instance of it.
@@ -153,7 +153,7 @@ def _get_interface_class(
         return _get_class(typestring, intf_type, loaded_intfs, intf_lock)
 
 
-def _get_class(typestring: str, subname: str, cache: dict[str, Any], lock: Lock) -> Any:
+def _get_class(typestring: str, subname: str, cache: Dict[str, Any], lock: Lock) -> Any:
     """If not loaded, loads the specified class then returns an instance
     of it.
 
@@ -207,7 +207,7 @@ def _load_class(modname: str, subname: str, classname: str) -> None:
         raise InvalidClassException(modname, subname, classname, exc)
 
 
-def _splittype(typestring: str) -> tuple[str, str]:
+def _splittype(typestring: str) -> Tuple[str, str]:
     """Split the string the / delimiter and strip out empty strings
 
     Performs similar logic to roslib.names.package_resource_name but is a bit
@@ -221,13 +221,13 @@ def _splittype(typestring: str) -> tuple[str, str]:
     raise InvalidTypeStringException(typestring)
 
 
-def _add_to_cache(cache: dict[str, Any], lock: Lock, key: str, value: any) -> None:
+def _add_to_cache(cache: Dict[str, Any], lock: Lock, key: str, value: any) -> None:
     lock.acquire()
     cache[key] = value
     lock.release()
 
 
-def _get_from_cache(cache: dict[str, Any], lock: Lock, key: str) -> Any:
+def _get_from_cache(cache: Dict[str, Any], lock: Lock, key: str) -> Any:
     """Returns the value for the specified key from the cache.
     Locks the lock before doing anything. Returns None if key not in cache"""
     lock.acquire()

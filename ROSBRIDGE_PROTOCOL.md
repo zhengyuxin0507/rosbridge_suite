@@ -93,12 +93,12 @@ ROS operations:
     * **call_service** - a service call
     * **service_response** - a service response
   * Actions:
-   * **advertise_action** - advertise an external action server
-   * **unadvertise_action** - unadvertise an external action server
-   * **send_action_goal** - a goal sent to an action server
-   * **cancel_action_goal** - cancel an in-progress action goal
-   * **action_feedback** - feedback messages from an action server
-   * **action_result** - an action result
+    * **advertise_action** - advertise an external action server
+    * **unadvertise_action** - unadvertise an external action server
+    * **send_action_goal** - a goal sent to an action server
+    * **cancel_action_goal** - cancel an in-progress action goal
+    * **action_feedback** - feedback messages from an action server
+    * **action_result** - an action result
 
 In general, actions or operations that the client takes (such as publishing and
 subscribing) have opcodes which are verbs (subscribe, call_service, unadvertise
@@ -560,15 +560,17 @@ A result for a ROS action.
   "id": <string>,
   "action": <string>,
   "values": <json>,
+  "status": <int>,
   "result": <boolean>
 }
 ```
 
  * **action** – the name of the action that was executed
+ * **id** – if an ID was provided to the action goal, then the action result will contain the ID
  * **values** – the result values. If the service had no return values, then
     this field can be omitted (and will be by the rosbridge server)
- * **id** – if an ID was provided to the action goal, then the action result will contain the ID
- * **result** - return value of the action. true means success, false failure.
+ * **status** - return status of the action. This matches the enumeration in the [`action_msgs/msg/GoalStatus`](https://docs.ros2.org/latest/api/action_msgs/msg/GoalStatus.html) ROS message.
+ * **result** - return value of action. True means success, false failure.
 
 ---
 
